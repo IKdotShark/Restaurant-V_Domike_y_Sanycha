@@ -1,5 +1,7 @@
 package com.test_task.restaurant.controllers;
 
+import com.test_task.restaurant.Dto.OrderRequest;
+import com.test_task.restaurant.Dto.StatusRequest;
 import com.test_task.restaurant.models.Orders;
 import com.test_task.restaurant.models.Orders.Status;
 import com.test_task.restaurant.services.OrdersService;
@@ -25,43 +27,26 @@ public class OrdersController {
         return ResponseEntity.ok(order);
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<Orders>> getAllOrders() {
         List<Orders> orders = ordersService.findAllOrders();
         return ResponseEntity.ok(orders);
     }
 
-    @PostMapping()
-    public ResponseEntity<Orders> createOrder(@RequestBody Orders order) {
-        Orders createdOrder = ordersService.createOrder(order);
+    @PostMapping
+    public ResponseEntity<Orders> createOrder(@RequestBody OrderRequest request) {
+        Orders createdOrder = ordersService.createOrder(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdOrder);
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Orders> updateOrder(@PathVariable Long id, @RequestBody Orders ordersInfo) {
-        Orders order = ordersService.findOrderById(id);
-        if (ordersInfo.getClient() != null) {
-            order.setClient(ordersInfo.getClient());
-        }
-        if (ordersInfo.getStatus() != null) {
-            order.setStatus(ordersInfo.getStatus());
-        }
-        if (ordersInfo.getEmployees() != null) {
-            order.setEmployees(ordersInfo.getEmployees());
-        }
-        Orders updatedOrder = ordersService.createOrder(order);
-        return ResponseEntity.ok(updatedOrder);
-    }
-
     @PatchMapping("/{id}/status")
-    public ResponseEntity<Orders> updateOrderStatus(@PathVariable Long id, @RequestParam Status status) {
+    public ResponseEntity<Orders> updateOrderStatus(@PathVariable Long id, @RequestBody StatusRequest request) {
         Orders order = ordersService.findOrderById(id);
-        order.setStatus(status);
-        Orders updatedOrder = ordersService.createOrder(order);
+        Orders updatedOrder = ordersService.updateOrderStatus(order, request);
         return ResponseEntity.ok(updatedOrder);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long id) {
         ordersService.deleteOrderById(id);
         return ResponseEntity.noContent().build();

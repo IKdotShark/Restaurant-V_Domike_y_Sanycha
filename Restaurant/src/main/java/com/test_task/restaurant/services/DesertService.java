@@ -52,4 +52,36 @@ public class DesertService {
         if (desert.isEmpty()) throw new ResourceNotFoundException("Not found desert with such " + id);
         desertRepository.deleteById(id);
     }
+
+    public Desert updateDesert(Desert desert, Desert desertInfo) {
+        if (desertInfo.getName() != null) {
+            desert.setName(desertInfo.getName());
+        }
+
+        if (desertInfo.getPrice() != desert.getPrice()) {
+            desert.setPrice(desertInfo.getPrice());
+        }
+
+        if (desertInfo.getTransientIngredients() != null) {
+            String ingredients = String.join(",", desertInfo.getTransientIngredients());
+            desert.setIngredients(ingredients);
+            desert.setTransientIngredients(desertInfo.getTransientIngredients());
+        } else {
+            List<String> ingredientsList = Arrays.asList(desert.getIngredients().split(","));
+            desert.setTransientIngredients(ingredientsList);
+        }
+
+        if (desertInfo.getDescription() != null) {
+            desert.setDescription(desertInfo.getDescription());
+        }
+
+        if (desertInfo.getCategory() != null) {
+            desert.setCategory(desertInfo.getCategory());
+        }
+
+        if (desertInfo.getSrc() != null) {
+            desert.setSrc(desertInfo.getSrc());
+        }
+        return desertRepository.save(desert);
+    }
 }

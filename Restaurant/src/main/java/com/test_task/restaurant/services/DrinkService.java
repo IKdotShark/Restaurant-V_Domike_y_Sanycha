@@ -46,4 +46,28 @@ public class DrinkService {
         if (drink.isEmpty()) throw new ResourceNotFoundException("Not found drink with such " + id);
         drinkRepository.deleteById(id);
     }
+
+    public Drink updateDrink(Drink drink, Drink drinkInfo) {
+        if (drinkInfo.getName() != null) {
+            drink.setName(drinkInfo.getName());
+        }
+
+        if (drinkInfo.getPrice() != drink.getPrice()) {
+            drink.setPrice(drinkInfo.getPrice());
+        }
+
+        if (drinkInfo.getDescription() != null) {
+            drink.setDescription(drinkInfo.getDescription());
+        }
+
+        if (drinkInfo.getCategory() != null) {
+            drink.setCategory(drinkInfo.getCategory());
+        }
+
+        if (drinkInfo.getSrc() != null) {
+            drink.setSrc(drinkInfo.getSrc());
+        }
+
+        return drinkRepository.save(drink);
+    }
 }

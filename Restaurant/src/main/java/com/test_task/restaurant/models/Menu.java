@@ -19,13 +19,13 @@ public class Menu {
     @ElementCollection
     private List<Long> desertsIds;
 
-    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
     private List<Dish> dishes;
 
-    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
     private List<Drink> drinks;
 
-    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "menu", cascade = CascadeType.ALL)
     private List<Desert> deserts;
 
     private Menu() {

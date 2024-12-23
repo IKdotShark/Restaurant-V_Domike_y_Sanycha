@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -21,6 +22,10 @@ public class DishController {
     @GetMapping("/{id}")
     public ResponseEntity<Dish> findDishById(@PathVariable Long id) {
         Dish dish = dishService.findDishById(id);
+        if (dish.getIngredients() != null) {
+            List<String> ingredientsList = Arrays.asList(dish.getIngredients().split(","));
+            dish.setTransientIngredients(ingredientsList);
+        }
         return ResponseEntity.ok(dish);
     }
 
@@ -39,13 +44,8 @@ public class DishController {
     @PutMapping("/update/{id}")
     public ResponseEntity<Dish> updateDish(@RequestBody Dish dishInfo, @PathVariable Long id) {
         Dish dish = dishService.findDishById(id);
-        dish.setName(dishInfo.getName());
-        dish.setIngredients(dishInfo.getIngredients());
-        dish.setPrice(dishInfo.getPrice());
-        dish.setDescription(dishInfo.getDescription());
-        dish.setSrc(dishInfo.getSrc());
-        dishService.createDish(dish);
-        return ResponseEntity.ok(dish);
+        Dish updatedDish = dishService.updateDish(dish, dishInfo);
+        return ResponseEntity.ok(updatedDish);
     }
 
     @DeleteMapping("/delete/{id}")

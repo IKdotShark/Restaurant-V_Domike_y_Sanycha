@@ -39,12 +39,8 @@ public class DrinkController {
     @PutMapping("/update/{id}")
     public ResponseEntity<Drink> updateDrink(@RequestBody Drink drinkInfo, @PathVariable Long id) {
         Drink drink = drinkService.findDrinkById(id);
-        drink.setName(drinkInfo.getName());
-        drink.setPrice(drinkInfo.getPrice());
-        drink.setDescription(drinkInfo.getDescription());
-        drink.setSrc(drinkInfo.getSrc());
-        drinkService.createDrink(drink);
-        return ResponseEntity.ok(drink);
+        Drink updatedDrink = drinkService.updateDrink(drink, drinkInfo);
+        return ResponseEntity.ok(updatedDrink);
     }
 
     @DeleteMapping("/delete/{id}")

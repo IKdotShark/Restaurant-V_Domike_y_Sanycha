@@ -57,26 +57,10 @@ public class MenuController {
     @PutMapping("/update/{id}")
     public ResponseEntity<Menu> updateMenu(@RequestBody Menu menuInfo, @PathVariable Long id) {
         Menu menu = menuService.findMenuById(id);
-
-        if (menuInfo.getDishesIds() != null) {
-            menu.getDishesIds().clear();
-            menu.getDishesIds().addAll(menuInfo.getDishesIds());
-        }
-
-        if (menuInfo.getDrinksIds() != null) {
-            menu.getDrinksIds().clear();
-            menu.getDrinksIds().addAll(menuInfo.getDrinksIds());
-        }
-
-        if (menuInfo.getDesertsIds() != null) {
-            menu.getDesertsIds().clear();
-            menu.getDesertsIds().addAll(menuInfo.getDesertsIds());
-        }
-
-        menuService.createMenu(menu);
-        return ResponseEntity.ok(menu);
+        Menu menuIdAdder = menuService.menuIdAdder(menuInfo, menu);
+        Menu updatedMenu = menuService.updateMenu(menuIdAdder);
+        return ResponseEntity.ok(updatedMenu);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Menu> deleteMenu(@PathVariable Long id) {
